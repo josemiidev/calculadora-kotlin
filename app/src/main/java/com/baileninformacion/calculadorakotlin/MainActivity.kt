@@ -49,21 +49,22 @@ class MainActivity : AppCompatActivity(), OnClickListener {
             binding.btn7 -> onNumberPressed("7")
             binding.btn8 -> onNumberPressed("8")
             binding.btn9 -> onNumberPressed("9")
-            binding.btnComa -> onNumberPressed(",")
-            binding.btnSuma -> ""
-            binding.btnResta -> ""
-            binding.btnMultiplicar -> ""
-            binding.btnDividir -> ""
-            binding.btnIgual -> ""
+            binding.btnComa -> onNumberPressed(".")
+            binding.btnSuma -> onOperationPressed("+")
+            binding.btnResta -> onOperationPressed("-")
+            binding.btnMultiplicar -> onOperationPressed("x")
+            binding.btnDividir -> onOperationPressed("/")
+            binding.btnIgual -> onEqualPressed()
             binding.btnLimpiar -> ""
         }
     }
 
     private fun onNumberPressed(number: String){
         renderScreen(number)
+        checkOperation()
     }
     private fun renderScreen(numero: String){
-        val result = if(binding.pantalla.text == "0" && numero != ",")
+        val result = if(binding.pantalla.text == "0" && numero != ".")
             numero
         else
             "${binding.pantalla.text}$numero"
@@ -76,4 +77,29 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         else
             numero2 = binding.pantalla.text.toString().toDouble()
     }
+    private fun onOperationPressed(operacion :String){
+        this.operacion = operacion
+        numero1 = binding.pantalla.text.toString().toDouble()
+
+        binding.pantalla.text = "0"
+    }
+
+    private fun onEqualPressed(){
+        val resultado = when(operacion){
+            "+" -> numero1 + numero2
+            "-" -> numero1 - numero2
+            "x" -> numero1 * numero2
+            "/" -> numero1 / numero2
+            else -> 0
+        }
+        operacion = null
+        numero1 = resultado.toDouble()
+
+        binding.pantalla.text = if(resultado.toString().endsWith(".0")){
+            resultado.toString().replace(".0","")
+        }else{
+            "%.2f".format(resultado).replace(",",".")
+        }
+    }
+
 }
