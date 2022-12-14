@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
             binding.btnMultiplicar -> onOperationPressed("x")
             binding.btnDividir -> onOperationPressed("/")
             binding.btnIgual -> onEqualPressed()
-            binding.btnLimpiar -> ""
+            binding.btnLimpiar -> onClearPressed()
         }
     }
 
@@ -95,11 +95,21 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         operacion = null
         numero1 = resultado.toDouble()
 
-        binding.pantalla.text = if(resultado.toString().endsWith(".0")){
-            resultado.toString().replace(".0","")
-        }else{
-            "%.2f".format(resultado).replace(",",".")
+        try{
+            binding.pantalla.text = if(resultado.toString().endsWith(".0")){
+                resultado.toString().replace(".0","")
+            }else{
+                "%.2f".format(resultado).replace(",",".")
+            }
+        } catch(e: Exception){
+            e.printStackTrace()
         }
+
+    }
+    private fun onClearPressed(){
+        binding.pantalla.text = "0"
+        numero1 = 0.0
+        numero2 = 0.0
     }
 
 }
